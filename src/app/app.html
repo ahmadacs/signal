@@ -1,0 +1,114 @@
+<main class="page-shell">
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Signal home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M7 17.2 13.1 23 25 9" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </span>
+      <span>signal<span class="brand-period">.</span></span>
+    </a>
+    <span class="topbar-note"><span class="live-dot"></span> Signals in sync</span>
+  </header>
+
+  <section class="intro" aria-labelledby="page-title">
+    <div>
+      <p class="eyebrow">SIGNALS / USER DIRECTORY</p>
+      <h1 id="page-title">A clearer view<br />of your people.</h1>
+      <p class="intro-copy">Choose a user to see their profile update in real time.</p>
+    </div>
+    <div class="intro-decoration" aria-hidden="true">
+      <span class="orbit orbit-one"></span>
+      <span class="orbit orbit-two"></span>
+      <span class="orbit orbit-three"></span>
+      <span class="orbit-core"></span>
+    </div>
+  </section>
+
+  <section class="profile-card" aria-labelledby="profile-heading">
+    <div class="card-topline">
+      <span class="section-label">PROFILE</span>
+      <label class="user-id-field">
+        <span>User ID</span>
+        <input
+          type="number"
+          min="1"
+          step="1"
+          [value]="userId()"
+          (input)="onUserIdInput($event)"
+          aria-label="Enter user ID"
+        />
+      </label>
+    </div>
+
+    @if (isLoading()) {
+      <div class="state-panel loading-panel" role="status" aria-live="polite">
+        <span class="spinner" aria-hidden="true"></span>
+        <span>Finding your signal...</span>
+      </div>
+    } @else if (error()) {
+      <div class="state-panel error-panel" role="alert">
+        <span class="error-icon" aria-hidden="true">!</span>
+        <div>
+          <strong>We couldn't load this profile.</strong>
+          <p>{{ error() }}</p>
+          <button class="retry-button" type="button" (click)="retry()">Try again</button>
+        </div>
+      </div>
+    } @else if (user(); as profile) {
+      <div class="identity">
+        <div class="avatar">{{ initials() }}</div>
+        <div class="identity-copy">
+          <p class="eyebrow">USER #{{ userId() }} <span class="identity-divider">/</span> @{{ profile.username }}</p>
+          <h2 id="profile-heading">{{ name() }}</h2>
+          <p class="company">{{ profile.company.name }} <span>·</span> {{ profile.address.city }}</p>
+        </div>
+        <span class="connected-badge"><span class="live-dot"></span> Connected</span>
+      </div>
+
+      <div class="details-grid">
+        <article class="detail-item">
+          <span class="detail-icon email-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="14" rx="3" stroke="currentColor" stroke-width="1.7" /><path d="m5 7 7 5 7-5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </span>
+          <div class="detail-copy">
+            <span class="detail-label">EMAIL ADDRESS</span>
+            <a [href]="'mailto:' + email()">{{ email() }}</a>
+          </div>
+          <span class="detail-arrow" aria-hidden="true">↗</span>
+        </article>
+
+        <article class="detail-item">
+          <span class="detail-icon phone-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><path d="M7.2 3.8h3l1.5 4-2 1.7a14.5 14.5 0 0 0 4.8 4.8l1.7-2 4 1.5v3c0 1.1-.9 2-2 2A15.2 15.2 0 0 1 5.2 5.8c0-1.1.9-2 2-2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </span>
+          <div class="detail-copy">
+            <span class="detail-label">PHONE NUMBER</span>
+            <a [href]="'tel:' + phone()">{{ phone() }}</a>
+          </div>
+          <span class="detail-arrow" aria-hidden="true">↗</span>
+        </article>
+
+        <article class="detail-item">
+          <span class="detail-icon web-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.7" /><path d="M3.8 12h16.4M12 3.5c2.1 2.3 3.2 5.1 3.2 8.5s-1.1 6.2-3.2 8.5C9.9 18.2 8.8 15.4 8.8 12s1.1-6.2 3.2-8.5Z" stroke="currentColor" stroke-width="1.5" /></svg>
+          </span>
+          <div class="detail-copy">
+            <span class="detail-label">WEBSITE</span>
+            <a [href]="'https://' + profile.website" target="_blank" rel="noopener noreferrer">{{ profile.website }}</a>
+          </div>
+          <span class="detail-arrow" aria-hidden="true">↗</span>
+        </article>
+      </div>
+    }
+
+    <footer class="card-footer">
+      <span><span class="footer-signal"></span> Powered by reactive signals</span>
+      <span>JSONPlaceholder API</span>
+    </footer>
+  </section>
+
+  <footer class="page-footer">
+    <span>Small details. Better connections.</span>
+  </footer>
+</main>
